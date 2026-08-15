@@ -133,6 +133,29 @@ Dördü de "iş başarısız" görüntüsü üretirken gerçek başka çıktı. 
    hata ekranı geldi, taşıyıcı `ok` dedi. *Sayısal kapı koy: <2000 karakter → başarısız; bilinen
    arayüz hata metinleri yanıt sayılmaz.* Taşıyıcıya "makul mü" diye sorma, eşik ver.
 
+## Koda erişimli tur: paketle → kalıcı kaynaklara yükle
+
+Modelin gerçek kodunla cevap vermesi için kaynak kodu sohbet ortamına yüklemek gerekir.
+`paketleme/` skill'i depoyu alt sisteme göre zip'lere böler; sonra bundle'lar **kalıcı** dosya
+deposuna konur. Kullanıcı **"güncelle"** dediğinde tek akış: yeniden paketle → eski bundle'ları
+sil → yenilerini yükle → sayfayı baştan yükleyip doğrula.
+
+**Kalıcı yükleme neden "çalışmıyor" görünür** (hattın en çok zaman yediren tuzağı): yükleme
+başarılı görünür, dosya listede belirir, **sayfa yenilenince kaybolur.** Sebep, sayfada birden çok
+gizli dosya girdisi olması ve menüden ilerleyen akışın çoğu zaman **mesaj kutusunun (composer)
+girdisine** düşmesidir — o kalıcı depo değil, geçici ektir.
+
+- Önce **kalıcı kaynaklar sekmesine geç**; hedef girdi yalnız o sekme açıkken DOM'da bulunur.
+- Girdiyi **o panelin kapsayıcısı içinden** seç, formdaki genel yükleme girdisini değil.
+- **Doğrulama = sayfayı baştan yükleyip listeyi tekrar okumak.** Geçici ek bu sınavı geçemez;
+  anlık DOM'a bakmak yanıltır.
+- **Satır menüsü gerçek fare tıklamasıyla açılmaz, DOM `click()` ile açılır** (koordinatta bir
+  kaplama olayı yakalıyor). Silme akışı sentetik tıklama ister.
+- Silme sonrası aynı adla yükleme `(1)` eki alabilir; karşılaştırmaları **kopya ekini atarak** yap.
+
+Silmeyi atlarsan servis dosyayı değiştirmez, yanına kopya biriktirir — birkaç turda kaynak listen
+aynı bundle'ın üç sürümüyle dolar ve model hangisinin güncel olduğunu bilemez.
+
 ## Yüklenen arşiv yolları repo yollarıyla AYNI DEĞİL
 
 Kod bundle'ları dizin yapısını düzleştirdiği için model **satır numarasını doğru, dosya yolunu

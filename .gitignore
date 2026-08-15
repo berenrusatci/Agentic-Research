@@ -7,3 +7,5 @@ read*/
 lane*.log
 lane*.err
 *.GECERSIZ
+bundles.conf
+paket-bundles/

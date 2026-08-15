@@ -114,6 +114,42 @@ Vault'u gezilebilir hale getiren üreteç (kapsama matrisi, rol bazlı olay tabl
 | `SKILL.md` | Hattın tam iş akışı — orkestratör ajanın okuyacağı tanım, tuzaklar, dersler |
 | `scripts/vlog.py` | Ortak kayıt aracı: `olay` / `yaz` / `ozet` |
 | `scripts/sablonlar/*.md` | Üç rolün görev şablonları; `{{...}}` doldurulup ajana verilir |
+| `paketleme/` | Depoyu alt sistem bazlı, sır taramasından geçmiş zip bundle'lara bölen skill |
+
+## "Koda erişimli tur" ve güncelleme akışı
+
+Modelin genel bilgiyle değil **senin gerçek kodunla** cevap vermesi için kaynak kodu sohbet
+ortamına yüklemek gerekir. İki adım:
+
+1. **Paketle** — `paketleme/paketle.sh` depoyu alt sisteme göre zip'lere böler
+   (`node_modules` yok, ikili varlık yok, sır taraması geçilmiş).
+2. **Kalıcı kaynaklara yükle** — bundle'ları sohbet ortamının *kalıcı* dosya deposuna koy.
+
+Kullanıcı **"güncelle"** dediğinde tek akış çalışır: yeniden paketle → eski bundle'ları sil →
+yenilerini yükle → sayfayı baştan yükleyip doğrula. Silme adımı şart, yoksa servis dosyayı
+değiştirmez, yanına `(1)`, `(2)` ekli kopyalar biriktirir.
+
+### Kalıcı yükleme neden "çalışmıyor" görünür (çözüldü)
+
+Bu, hattın en çok zaman yediren tuzağıydı: yükleme başarılı görünüyor, dosya listede beliriyor,
+**sayfa yenilenince kayboluyordu.**
+
+Sebep: sayfada birden çok gizli dosya girdisi var ve menüden ilerleyen yükleme akışı çoğu zaman
+**mesaj kutusunun (composer) girdisine** düşüyor — o da kalıcı depo değil, o anki mesaja iliştirilen
+geçici ek. Çözüm, girdiyi menüye değil DOM'a bakarak seçmek:
+
+- Önce **kalıcı kaynaklar sekmesine geç** — hedef girdi yalnız o sekme açıkken DOM'da bulunur.
+- Yükleme girdisini **o panelin içinden** seç (panelin kapsayıcısına göre), formun/composer'ın
+  içindeki genel yükleme girdisini değil.
+- Yüklemeden sonra **sayfayı baştan yükleyip listeyi tekrar oku.** Geçici ek bu sınavı geçemez;
+  doğrulaman bu olmalı, anlık DOM değil.
+
+İki ek ayrıntı, ikisi de ölçüldü:
+
+- **Satır menüsü gerçek fare tıklamasıyla açılmıyor**, DOM `click()` ile açılıyor — düğme
+  koordinatında bir kaplama olayı yakalıyor. Silme akışı bu yüzden sentetik tıklama ister.
+- Silinen bir dosyanın adı bir süre "meşgul" kalabilir; aynı adla yeniden yükleyince `(1)` eki gelir.
+  Karşılaştırmalarını **kopya ekini atarak** yap, yoksa güncellediğin dosyayı bulamazsın.
 
 ---
 
