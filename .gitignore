@@ -1,0 +1,9 @@
+# çalışma artefaktları / sırlar
+*.json
+!package.json
+node_modules/
+ham/
+read*/
+lane*.log
+lane*.err
+*.GECERSIZ
