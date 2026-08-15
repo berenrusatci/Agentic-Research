@@ -113,7 +113,7 @@ Vault'u gezilebilir hale getiren üreteç (kapsama matrisi, rol bazlı olay tabl
 |---|---|
 | `SKILL.md` | Hattın tam iş akışı — orkestratör ajanın okuyacağı tanım, tuzaklar, dersler |
 | `scripts/vlog.py` | Ortak kayıt aracı: `olay` / `yaz` / `ozet` |
-| `scripts/sablonlar/*.md` | Üç rolün görev şablonları; `{{...}}` doldurulup ajana verilir |
+| `scripts/sablonlar/*.md` | Rol görev şablonları (üç rol + kaynak güncelleme); `{{...}}` doldurulup ajana verilir |
 | `paketleme/` | Depoyu alt sistem bazlı, sır taramasından geçmiş zip bundle'lara bölen skill |
 
 ## "Koda erişimli tur" ve güncelleme akışı

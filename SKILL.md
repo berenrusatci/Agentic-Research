@@ -156,6 +156,21 @@ girdisine** düşmesidir — o kalıcı depo değil, geçici ektir.
 Silmeyi atlarsan servis dosyayı değiştirmez, yanına kopya biriktirir — birkaç turda kaynak listen
 aynı bundle'ın üç sürümüyle dolar ve model hangisinin güncel olduğunu bilemez.
 
+### Güncellemeyi taşıyıcıya devret
+
+Bu bir taşıma işidir; orkestratör bağlamında yapılması gereksizdir. Şablon:
+`sablonlar/kaynak-guncelle.md` — taşıyıcı sil-yükle-doğrula turunu yapar, `vlog.py` ile loglar,
+5 satır rapor döner; orkestratör `vlog.py ozet` ile denetler.
+
+Ölçüldü: ucuz/hızlı model bu turu tek denemede ~35 saniyede tamamladı ve kullanıcının mevcut
+dosyalarına dokunmadı. **Belirleyici olan model kapasitesi değil, görevin sayısallaştırılmasıydı** —
+aynı model, "makul mü bak" denen bir turda 52 karakterlik hata ekranına `ok` demişti. Şablonda bu
+yüzden her kapı bir karşılaştırma olarak yazılıdır ve kopya eki tuzağı ("`ad(2).zip` normaldir")
+önceden bildirilir; bildirilmezse taşıyıcı bunu başarısızlık sanar.
+
+Yazma işi olduğu için şablonda bir **kırmızı çizgi** var: göreve dahil olmayan dosyalar
+kullanıcının verisidir, şüpheye düşünce sil değil "hata" bildir.
+
 ## Yüklenen arşiv yolları repo yollarıyla AYNI DEĞİL
 
 Kod bundle'ları dizin yapısını düzleştirdiği için model **satır numarasını doğru, dosya yolunu
